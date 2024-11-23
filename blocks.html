@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>擲筊遊戲</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        background-color: #f9f9f9;
+        margin: 0;
+        padding: 20px;
+      }
+      h1 {
+        color: #555;
+      }
+      .cup {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+      }
+      .cup img {
+        width: 100px;
+        height: 180px;
+        margin: 0 10px;
+      }
+      .cup_left {
+        transition: transform 2s ease; /* 設定旋轉的過渡效果 */
+      }
+      .cup_right {
+        transition: transform 2s ease; /* 設定旋轉的過渡效果 */
+      }
+      .rotate {
+        transform: rotateY(-3780deg);
+      }
+      .result {
+        font-size: 24px;
+        margin-top: 20px;
+        color: #333;
+      }
+      .button {
+        padding: 10px 20px;
+        font-size: 18px;
+        color: #fff;
+        background-color: #007bff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 20px;
+        transition: background-color 0.3s ease;
+      }
+      .button:hover {
+        background-color: #0056b3;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>擲筊遊戲</h1>
+    <div id="cups" class="cup">
+      <div>
+        <img
+          src="../smallGame-SideProject/images/cupUpImg.png"
+          alt="筊杯1"
+          class="cup_left"
+          id="cup_left"
+        />
+      </div>
+      <div style="transform: rotateY(-3780deg)">
+        <img
+          src="../smallGame-SideProject/images/cupUpImg.png"
+          alt="筊杯2"
+          class="cup_right"
+          id="cup_right"
+        />
+      </div>
+    </div>
+    <div class="result" id="result">請按下按鈕擲筊</div>
+    <button id="button" class="button" onclick="throwDivination()">擲筊</button>
+    <div>
+      <h3>擲筊禮儀與注意事項：</h3>
+      <p>表達清楚：擲筊前先誠心祈禱，清楚描述問題或請求。</p>
+      <p>誠心誠意：保持心中無雜念，心意誠懇，神明才能清楚感知。</p>
+      <p>次數建議：通常連續擲出三次聖筊，才能確認答案是穩定的。</p>
+      <p>聖筊: 表示神明允許、同意。</p>
+      <p>笑筊: 可以重新再擲筊請示神明或再次說清楚自己的祈求。</p>
+      <p>陰筊: 表示神明否定或不宜行事，可以重新再擲筊請示。</p>
+    </div>
+    <script>
+      function throwDivination() {
+        // 定義圖片 URL
+        const cupUpImg = "../smallGame-SideProject/images/cupUpImg.png"; // ◖
+        const cupDownImg = "../smallGame-SideProject/images/cupDownImg.png"; // (
+
+        // 獲取 DOM 元素
+        const cup_left = document.getElementById("cup_left");
+        const cup_right = document.getElementById("cup_right");
+        const result = document.getElementById("result");
+
+        // 觸發旋轉動畫
+        cup_left.classList.add("rotate");
+        cup_right.classList.add("rotate");
+
+        // 等待動畫結束後更新圖片及結果
+        setTimeout(() => {
+          // 隨機決定筊杯朝向
+          const cup1 = Math.random() > 0.5 ? cupUpImg : cupDownImg;
+          const cup2 = Math.random() > 0.5 ? cupUpImg : cupDownImg;
+
+          // 更新筊杯圖片
+          cup_left.src = cup1;
+          cup_right.src = cup2;
+
+          // 根據結果顯示說明
+          let resultText = "";
+          if (
+            (cup1 === cupUpImg && cup2 === cupDownImg) ||
+            (cup2 === cupUpImg && cup1 === cupDownImg)
+          ) {
+            resultText = "聖筊";
+          } else if (cup1 === cupDownImg && cup2 === cupDownImg) {
+            resultText = "笑筊";
+          } else if (cup1 === cupUpImg && cup2 === cupUpImg) {
+            resultText = "陰筊";
+          } else {
+            resultText = "再來一次吧！";
+          }
+
+          // 更新結果文字
+          result.innerText = resultText;
+
+          // 移除旋轉動畫 class
+          cup_left.classList.remove("rotate");
+          cup_right.classList.remove("rotate");
+        }, 1000); // 設定延遲時間對應動畫時間
+      }
+    </script>
+  </body>
+</html>

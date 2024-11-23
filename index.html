@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Side Project</title>
+    <!-- google fonts -->
+    <link
+      href="https://fonts.googleapis.com/css?family=Noto+Sans+TC:100,300,400,500,700,900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        box-sizing: border-box;
+        font-family: "Noto Sans TC", "Microsoft JhengHei", PingFang, STHeiti,
+          sans-serif, serif;
+      }
+      body {
+        background-color: rgba(204, 204, 204, 0.381);
+        text-align: center;
+      }
+      .wrap {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        max-width: 1200px;
+        margin: auto;
+      }
+      .item {
+        margin: 20px;
+        transform: scale(1);
+        transition: 0.5s;
+        box-shadow: 2px 3px 5px rgb(133, 132, 132);
+      }
+      .item:hover {
+        transform: scale(1.1);
+      }
+      .pic img {
+        width: 100%;
+        vertical-align: middle;
+      }
+      .txt {
+        background-color: #fff;
+        padding: 10px 0;
+      }
+      .item a {
+        color: #aaa;
+        text-decoration: none;
+      }
+      @media screen and (max-width: 768px) {
+        .wrap {
+          flex-wrap: wrap;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <h1>SmallGame Side Project</h1>
+    <div class="wrap">
+      <div class="item">
+        <a href="./wheel.html">
+          <div class="pic">
+            <img src="./images/web_wheel.png" alt="擲筊遊戲" />
+          </div>
+          <div class="txt">
+            <p>擲筊遊戲</p>
+          </div>
+        </a>
+      </div>
+      <div class="item">
+        <a href="./blocks.html">
+          <div class="pic">
+            <img src="./images/web_blocks.png" alt="輪盤遊戲" />
+          </div>
+          <div class="txt">
+            <p>輪盤遊戲</p>
+          </div>
+        </a>
+      </div>
+      <!-- <div class="item">
+        <a href="./p18.html">
+          <div class="pic">
+            <img src="./images/p18.jpg" alt="多層次收合選單" />
+          </div>
+          <div class="txt">
+            <p>多層次收合選單</p>
+          </div>
+        </a>
+      </div> -->
+    </div>
+  </body>
+</html>
