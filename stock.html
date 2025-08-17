@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>分批買進試算器</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #f9f9f9;
+        padding: 30px;
+        text-align: center;
+      }
+      .container {
+        max-width: 700px;
+        margin: auto;
+        background: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+        color: #333;
+      }
+      input {
+        padding: 10px;
+        margin: 10px;
+        width: 80%;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+      }
+      button {
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 6px;
+        border: none;
+        background: #007bff;
+        color: #fff;
+        cursor: pointer;
+        transition: background 0.3s;
+      }
+      button:hover {
+        background: #0056b3;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+      }
+      table,
+      th,
+      td {
+        border: 1px solid #ddd;
+      }
+      th,
+      td {
+        padding: 10px;
+        text-align: center;
+      }
+      th {
+        background: #f0f0f0;
+      }
+      .result {
+        margin-top: 15px;
+        font-size: 18px;
+        color: #333;
+        text-align: left;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>分批買進試算器</h1>
+      <input type="number" id="basePrice" placeholder="輸入基準價格" />
+      <input type="number" id="totalMoney" placeholder="輸入總資金" />
+      <br />
+      <button onclick="calculate()">計算</button>
+
+      <div id="output"></div>
+    </div>
+
+    <script>
+      function calculate() {
+        const basePrice = parseFloat(
+          document.getElementById("basePrice").value
+        );
+        const totalMoney = parseFloat(
+          document.getElementById("totalMoney").value
+        );
+
+        if (!basePrice || !totalMoney) {
+          alert("請輸入基準價格與總資金！");
+          return;
+        }
+
+        // 策略
+        const strategy = [
+          { rate: 0.95, weight: 1 },
+          { rate: 0.9, weight: 2 },
+          { rate: 0.85, weight: 4 },
+        ];
+
+        const stopLossRate = 0.8;
+
+        const totalWeight = strategy.reduce((sum, s) => sum + s.weight, 0);
+
+        let rows = "";
+        let totalCost = 0;
+        let totalQty = 0;
+
+        strategy.forEach((step) => {
+          const price = basePrice * step.rate; // 價格
+          const allocatedMoney = totalMoney * (step.weight / totalWeight); // 分配資金
+          const qty = (allocatedMoney / price).toFixed(2); // 張數
+          const cost = qty * price; //金額
+          totalCost += cost; //總金額
+          totalQty += Number(qty); //總張數
+
+          rows += `
+          <tr>
+            <td>${step.rate * 100}%</td>
+            <td>${price}</td>
+            <td>${qty}</td>
+            <td>${cost}</td>
+          </tr>
+        `;
+        });
+
+        // 平均價
+        const avgPrice = totalCost / totalQty;
+
+        // 停損價
+        const stopLossPrice = basePrice * stopLossRate; //停損價(80%)
+
+        // 最大虧損
+        const maxLoss = (avgPrice - stopLossPrice) * totalQty; //停損價差*總張數
+
+        // 停利價（RR = 1:3）
+        const takeProfitPrice =
+          parseFloat(avgPrice) + (avgPrice - stopLossPrice) * 3;
+
+        document.getElementById("output").innerHTML = `
+        <table>
+          <tr>
+            <th>買進比例</th>
+            <th>價格</th>
+            <th>張數</th>
+            <th>金額</th>
+          </tr>
+          ${rows}
+        </table>
+        <div class="result">
+          📌 總張數：${totalQty} <br>
+          💰 總花費：${totalCost} <br>
+          ⚖️ 平均成本價：${avgPrice.toFixed(2)} <br>
+          🚪 停損價 (80%)：${stopLossPrice} <br>
+          ❌ 最大可接受虧損總金額：${maxLoss.toFixed(2)} <br>
+          ✅ 停利出場價 (1:3 RR)：${takeProfitPrice.toFixed(2)}
+        </div>
+      `;
+      }
+    </script>
+  </body>
+</html>
